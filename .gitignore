@@ -1,0 +1,13 @@
+.vscode/
+.idea/
+.env/
+.venv/
+
+__pycache__/
+
+md_compiler_server.egg-info/
+
+dist/
+build/
+
+logs/
