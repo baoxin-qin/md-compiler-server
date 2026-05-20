@@ -1,13 +1,24 @@
+# 忽略 IDE 相关目录
 .vscode/
 .idea/
+
+# 忽略环境变量文件
 .env/
 .venv/
 
+# 忽略 py 缓存目录
 __pycache__/
 
+# 忽略 egg-info 目录
 md_compiler_server.egg-info/
 
+# 忽略构建目录
 dist/
 build/
 
+# 忽略输出目录的具体内容，但是保留目录结构
+src/output/**/*
+!src/output/.gitkeep
+
+# 忽略日志目录
 logs/
