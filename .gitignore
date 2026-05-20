@@ -6,7 +6,7 @@
 .env/
 .venv/
 
-# 忽略 py 缓存目录
+# 忽略缓存目录
 __pycache__/
 
 # 忽略 egg-info 目录
@@ -16,9 +16,9 @@ md_compiler_server.egg-info/
 dist/
 build/
 
-# 忽略输出目录的具体内容，但是保留目录结构
+# 忽略 output 目录的具体内容，但保留目录结构
 src/output/**/*
 !src/output/.gitkeep
 
-# 忽略日志目录
+# 忽略 logs 目录
 logs/
