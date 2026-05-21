@@ -24,6 +24,7 @@ class TokenType(Enum):
     Text            = "Text"
     Newline         = "Newline"
     LineBreak       = "LineBreak"  # 换行符
+    Whitespace      = "Whitespace"  # 空格
 
 class Token(BaseModel):
     """Token 类"""
@@ -54,4 +55,30 @@ RegExpPattern: dict[TokenType, str] = {
     TokenType.Bold          : r"\*\*(.*?)\*\*",
     TokenType.Italic        : r"\*(.*?)\*",
     TokenType.Strikethrough : r"~~(.*?)~~",
+}
+
+# 节点类型标签映射
+HtmlMap: dict[TokenType, tuple[str, str]] = {
+    TokenType.Document          : ("", ""),
+    TokenType.Heading           : lambda n: (f"<h{n['level']}>", f"</h{n['level']}>"),
+    TokenType.UnorderedList     : ("<ul>", "</ul>"),
+    TokenType.OrderedList       : ("<ol>", "</ol>"),
+    TokenType.ListItem          : ("<li>", "</li>"),
+    TokenType.Blockquote        : ("<blockquote>", "</blockquote>"),
+    TokenType.HorizontalRule    : ("<hr>", ""),
+    TokenType.Link              : lambda n: (f"<a href='{n['url']}'>", "</a>"),
+    TokenType.Image             : lambda n: (f"<img src='{n['url']}' alt='{n['alt']}' />", ""),
+    TokenType.CodeBlock: lambda n: (
+        f"<pre><code class='language-{n['lang']}'>",
+        "</code></pre>"
+    ),
+    TokenType.InlineCode        : ("<code>", "</code>"),
+    TokenType.Paragraph         : ("<p>", "</p>"),
+    TokenType.Bold              : ("<strong>", "</strong>"),
+    TokenType.Italic            : ("<em>", "</em>"),
+    TokenType.Strikethrough     : ("<del>", "</del>"),
+    TokenType.Text              : ("", ""),
+    TokenType.Whitespace        : ("", ""),
+    TokenType.Newline           : ("\n", ""),
+    TokenType.LineBreak         : ("<br>", ""),
 }
