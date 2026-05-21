@@ -27,13 +27,18 @@ def CompileMarkdown(request: CompileRequest):
     # 2. 语法分析
     parser = Parser(tokens)
     ast: AstNode = parser.run(os.path.join(OUTPUT_DIR, 'ast.json'))
+
+    lexer.clear()
     del lexer, tokens  # 释放内存
 
     # 3. 目标代码生成
     builder: Builder = HtmlBuilder(ast)
     html = builder.run(os.path.join(OUTPUT_DIR, 'ir.txt'))
+
+    parser.clear()
     del parser, ast # 释放内存
 
+    builder.clear()
     del html
     return {
         "code": 200,

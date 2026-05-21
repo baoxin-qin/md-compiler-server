@@ -20,6 +20,10 @@ class Lexer:
         self.writeJSON(filePath)
         return self.tokens
     
+    def clear(self):
+        self.tokens.clear()
+        self.md = ""
+    
     def tokenize(self):
         """
         主分词方法，根据正则表达式模式匹配文本流，生成 Token 流

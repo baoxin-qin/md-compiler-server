@@ -17,6 +17,10 @@ class Parser:
         self.writeJSON(filePath)
         return self.ast
     
+    def clear(self):
+        self.ast = None
+        self.tokens.clear()
+    
     def parse(self) -> AstNode:
         root = AstNode(type=TokenType.Document, value=None, children=[])
         stack: list[tuple[AstNode, int]] = []  # 处理嵌套层级的栈
@@ -152,7 +156,7 @@ class Parser:
                     if nodeType == TokenType.Image:
                         result.append(AstNode(
                             type=nodeType,
-                            value=f"{match.group(2)|match.group(1)}"
+                            value=match.group(2) or match.group(1)
                         ))
                     elif nodeType == TokenType.Link:
                         result.append(AstNode(

@@ -24,6 +24,9 @@ class HtmlBuilder(Builder):
     def run(self, filePath: str):
         self.html = self.build()
         self.writeTxt(filePath)
+    
+    def clear(self):
+        self.html = ""
 
     @override
     def build(self) -> str:
@@ -210,5 +213,4 @@ class HtmlBuilder(Builder):
         except Exception as e:
             print(f"写入HTML文件时出错: {e}")
         finally:
-            self.html = ""
             print("目标代码生成结束")
