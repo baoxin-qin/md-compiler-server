@@ -2,7 +2,6 @@
 
 import re
 import json
-from unittest import result
 from src.service.instance import Token, TokenType, AstNode, RegExpPattern
 
 class Parser:
@@ -156,7 +155,7 @@ class Parser:
                     if nodeType == TokenType.Image:
                         result.append(AstNode(
                             type=nodeType,
-                            value=match.group(2) or match.group(1)
+                            value=f"{match.group(2)}|{match.group(1)}"
                         ))
                     elif nodeType == TokenType.Link:
                         result.append(AstNode(
