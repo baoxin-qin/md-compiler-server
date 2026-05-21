@@ -39,7 +39,7 @@ class Parser:
                 root.children.append(AstNode(
                     type=TokenType.Heading,
                     value=f"{level}",
-                    children=[AstNode(type=TokenType.Text, value=text)]
+                    children=self.parseInline(text)
                 ))
                 stack.clear()
                 i += 1
@@ -174,8 +174,20 @@ class Parser:
                     matched = True
                     break
             if not matched:
-                result.append(AstNode(type=TokenType.Text, value=remaining[0]))
-                remaining = remaining[1:]
+                # 收集连续的普通文本字符，直到遇到内联元素的开始位置
+                text_content = ""
+                while remaining:
+                    has_match = False
+                    for _, pattern in priority:
+                        if re.match(pattern, remaining):
+                            has_match = True
+                            break
+                    if has_match:
+                        break
+                    text_content += remaining[0]
+                    remaining = remaining[1:]
+                if text_content:
+                    result.append(AstNode(type=TokenType.Text, value=text_content))
 
         return result
     
