@@ -4,8 +4,9 @@ import os
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from src.service.instance import Token
+from src.service.instance import Token, AstNode
 from src.service.lexer import Lexer
+from src.service.parser import Parser
 
 class CompileRequest(BaseModel):
     markdown: str
@@ -21,5 +22,13 @@ def CompileMarkdown(request: CompileRequest):
     # 1. 词法分析
     lexer = Lexer(request.markdown)
     tokens: list[Token] = lexer.run(os.path.join(OUTPUT_DIR, 'tokens.json'))
+    # 2. 语法分析
+    parser = Parser(tokens)
+    ast: AstNode = parser.run(os.path.join(OUTPUT_DIR, 'ast.json'))
+    del lexer, tokens  # 释放内存
 
-    return {"html": "<h1>Waiting to be done ...</h1>"}
+    return {
+        "code": 200,
+        "msg": "编译成功",
+        "html": "<p>Waiting to be done ...</p>"
+    }

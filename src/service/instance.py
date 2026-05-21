@@ -2,12 +2,15 @@
 
 from pydantic import BaseModel
 from enum import Enum
+from typing import Optional, List
 
 class TokenType(Enum):
     """Token 类型枚举"""
+    Document        = "Document"  # 文档根节点
     Heading         = "Heading"
     UnorderedList   = "UnorderedList"
     OrderedList     = "OrderedList"
+    ListItem        = "ListItem"
     HorizontalRule  = "HorizontalRule"
     Blockquote      = "Blockquote"
     Link            = "Link"
@@ -18,13 +21,21 @@ class TokenType(Enum):
     Italic          = "Italic"
     Strikethrough   = "Strikethrough"
     Paragraph       = "Paragraph"
+    Text            = "Text"
     Newline         = "Newline"
+    LineBreak       = "LineBreak"  # 换行符
 
 class Token(BaseModel):
     """Token 类"""
     type    : TokenType  # Token 类型
     value   : str        # Token 值
     indent  : int        # Token 在源文件中的缩进数
+
+class AstNode(BaseModel):
+    """AST 节点类"""
+    type    : TokenType
+    value   : Optional[str] = None  # 有些节点不需要值
+    children: List["AstNode"] = []
 
 """
 正则表达式模式
