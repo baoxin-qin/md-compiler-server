@@ -110,7 +110,11 @@ class Parser:
                 node: AstNode = AstNode(type=TokenType.ListItem, children=self.parseInline(thisText))
 
                 if not stack:
-                    root.children.append(AstNode(type=thisType, children=[node]))
+                    # 检查 root.children 最后一个元素是否是相同类型的列表
+                    if root.children and root.children[-1].type == thisType:
+                        root.children[-1].children.append(node)
+                    else:
+                        root.children.append(AstNode(type=thisType, children=[node]))
                     stack.append((node, thisIndent))
                 else:
                     parentNode, parentIndent = stack[-1]
