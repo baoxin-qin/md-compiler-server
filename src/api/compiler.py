@@ -13,6 +13,10 @@ class CompileRequest(BaseModel):
 
 router = APIRouter()
 
+@router.options("/compile")
+def OptionsCompile():
+    return {"code": 200, "msg": "Options", "flag": True, "data": None}
+
 @router.post("/compile")
 def CompileMarkdown(request: CompileRequest):
     """Markdown 编译 API"""
