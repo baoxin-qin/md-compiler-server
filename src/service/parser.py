@@ -2,6 +2,7 @@
 
 import re
 import json
+from service.instance import AstNode
 from src.service.instance import Token, TokenType, AstNode, RegExpPattern
 
 class Parser:
@@ -78,11 +79,12 @@ class Parser:
                     children=[AstNode(type=TokenType.Text, value=content)]
                 ))
                 stack.clear()
+                i += 1
                 continue
             # 段落
             elif token.type == TokenType.Paragraph:
                 # 段落之间是连续的，没有换行符分割，则将它们合并
-                paragraph: list[str] = []
+                paragraph: list[AstNode] = []
 
                 paragraph.extend(self.parseInline(token.value))
                 i += 1
@@ -105,7 +107,7 @@ class Parser:
                 # 若当前的缩进大于栈顶，则需要退栈
                 while stack and stack[-1][1] >= thisIndent:
                     stack.pop()
-                node: AstNode = AstNode(type=TokenType.ListItem, value=self.parseInline(thisText))
+                node: AstNode = AstNode(type=TokenType.ListItem, children=self.parseInline(thisText))
 
                 if not stack:
                     root.children.append(AstNode(type=thisType, children=[node]))
@@ -113,9 +115,9 @@ class Parser:
                 else:
                     parentNode, parentIndent = stack[-1]
                     if thisIndent > parentIndent:
-                        lastNode = parentNode.children[-1]
-                        sub: AstNode | None = None
-                        for child in reversed(lastNode.children):
+                        lastNode: AstNode = parentNode.children[-1]
+                        sub = None
+                        for child in reversed[AstNode](lastNode.children):
                             if child.type == thisType:
                                 sub = child
                                 break
