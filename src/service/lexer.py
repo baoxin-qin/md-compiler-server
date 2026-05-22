@@ -1,7 +1,6 @@
 """词法分析器"""
 
 import re
-import json
 from src.service.instance import RegExpPattern, Token, TokenType
 
 class Lexer:
@@ -10,19 +9,10 @@ class Lexer:
         self.md = md
         self.tokens: list[Token] = []
     
-    def setInput(self, md: str):
-        self.md = md
-        self.tokens.clear()
-    
-    def run(self, filePath: str) -> list[Token]:
+    def run(self) -> list[Token]:
         """运行词法分析器"""
         self.tokenize()
-        self.writeJSON(filePath)
         return self.tokens
-    
-    def clear(self):
-        self.tokens.clear()
-        self.md = ""
     
     def tokenize(self):
         """
@@ -105,24 +95,3 @@ class Lexer:
 
             # 8. 处理段落（包含内联元素）
             self.tokens.append(Token(type=TokenType.Paragraph, indent=0, value=line))
-    
-    def toDict(self):
-        """将 Token 流转换为 字典列表"""
-        result = []
-        for token in self.tokens:
-            token_dict = token.model_dump()
-            # 将 TokenType Enum 转换为字符串，因为 Enum 不能直接序列化
-            token_dict['type'] = token_dict['type'].value
-            result.append(token_dict)
-        return result
-    
-    def writeJSON(self, filePath: str):
-        """将 Token 流写入 JSON 文件"""
-        try:
-            with open(filePath, 'w', encoding='utf-8') as f:
-                json.dump(self.toDict(), f, ensure_ascii=False, indent=2)
-                print(f"Tokens 流写入 JSON 文件: {filePath}")
-        except Exception as e:
-            print(f"写入 JSON 文件失败: {e}")
-        finally:
-            print("词法分析结束")

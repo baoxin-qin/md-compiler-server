@@ -21,12 +21,9 @@ class HtmlBuilder(Builder):
         self.html: str = ""
     
     @override
-    def run(self, filePath: str):
+    def run(self) -> str:
         self.html = self.build()
-        self.writeTxt(filePath)
-    
-    def clear(self):
-        self.html = ""
+        return self.html
 
     @override
     def build(self) -> str:
@@ -203,14 +200,3 @@ class HtmlBuilder(Builder):
             # 其他类型，直接遍历子节点
             for child in subChildren:
                 self.traverseInline(child, result)
-    
-    def writeTxt(self, filePath: str):
-        """将HTML写入文件"""
-        try:
-            with open(filePath, 'w', encoding='utf-8') as f:
-                f.write(self.html)
-                print(f"HTML已写入文件: {filePath}")
-        except Exception as e:
-            print(f"写入HTML文件时出错: {e}")
-        finally:
-            print("目标代码生成结束")

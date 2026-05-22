@@ -1,8 +1,6 @@
 """语法分析器"""
 
 import re
-import json
-from service.instance import AstNode
 from src.service.instance import Token, TokenType, AstNode, RegExpPattern
 
 class Parser:
@@ -11,15 +9,10 @@ class Parser:
         self.tokens: list[Token] = tokens
         self.ast: AstNode = None
     
-    def run(self, filePath: str) -> AstNode:
+    def run(self) -> AstNode:
         """运行解析器，返回 AST"""
         self.ast = self.parse()
-        self.writeJSON(filePath)
         return self.ast
-    
-    def clear(self):
-        self.ast = None
-        self.tokens.clear()
     
     def parse(self) -> AstNode:
         root = AstNode(type=TokenType.Document, value=None, children=[])
@@ -199,30 +192,3 @@ class Parser:
                     result.append(AstNode(type=TokenType.Text, value=text_content))
 
         return result
-    
-    def _nodeToDict(self, node: 'AstNode') -> dict:
-        """递归将单个 AstNode 转换为字典"""
-        result = {
-            'type': node.type.value,  # 将 TokenType Enum 转换为字符串
-            'value': node.value
-        }
-        if node.children:
-            result['children'] = [self._nodeToDict(child) for child in node.children]
-        return result
-
-    def toDict(self) -> dict:
-        """将 AST 转换为字典"""
-        if self.ast:
-            return self._nodeToDict(self.ast)
-        return {}
-
-    def writeJSON(self, filePath: str):
-        """将 AST 写入 JSON 文件"""
-        try:
-            with open(filePath, 'w', encoding='utf-8') as f:
-                json.dump(self.toDict(), f, ensure_ascii=False, indent=2)
-                print(f"AST 写入 JSON 文件: {filePath}")
-        except Exception as e:
-            print(f"写入 JSON 文件失败: {e}")
-        finally:
-            print("语法分析结束")
