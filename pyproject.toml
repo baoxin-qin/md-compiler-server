@@ -5,8 +5,8 @@ authors = [{name = "baoxin-qin", email = "baoxin_qin@qq.com"}]
 description = "A simple Markdown-To-HTML compiler in FastAPI server point"
 requires-python = ">=3.10"
 dependencies = [
-	"fastapi",
-	"uvicorn",
+	"fastapi>=0.136.0",
+	"uvicorn>=0.47.0",
 ]
 
 [tool.setuptools.packages.find]
