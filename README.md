@@ -40,6 +40,6 @@ pip install -e .
 
 ```bash
 cd md-compiler-server
-scripts/run.ps1  # if in Windows
-scripts/run.sh  # if in Linux/MacOS
+.venv/Scripts/activate  # 启动虚拟环境
+scripts/run.sh  # 运行项目
 ```
